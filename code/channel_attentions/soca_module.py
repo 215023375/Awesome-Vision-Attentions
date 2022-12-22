@@ -1,6 +1,7 @@
 # Second-Order Attention Network for Single Image Super-Resolution (CVPR 2019)
 import jittor as jt
-from jittor import nn, Function
+from torch import nn
+from jittor import Function
 
 
 class Covpool(Function):

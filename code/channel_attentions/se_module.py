@@ -1,5 +1,5 @@
 import jittor as jt
-import jittor.nn as nn
+from torch import nn
 
 
 class SELayer(nn.Module):

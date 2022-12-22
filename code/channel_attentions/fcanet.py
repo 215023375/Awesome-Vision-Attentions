@@ -1,7 +1,7 @@
 # Fcanet: Frequency channel attention networks (ICCV 2021)
 import math
 import jittor as jt
-from jittor import nn
+from torch import nn
 
 
 def get_freq_indices(method):

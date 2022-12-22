@@ -1,6 +1,6 @@
 # Gated channel transformation for visual recognition (CVPR2020)
 import jittor as jt
-from jittor import nn
+from torch import nn
 
 
 class GCT(nn.Module):

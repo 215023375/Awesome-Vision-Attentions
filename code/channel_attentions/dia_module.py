@@ -1,6 +1,6 @@
 # DIANet: Dense-and-Implicit Attention Network (AAAI 2020)
 import jittor as jt
-from jittor import nn
+from torch import nn
 
 
 class small_cell(nn.Module):
@@ -36,7 +36,7 @@ class LSTMCell(nn.Module):
         self.w_ih = nn.ModuleList(ih)
         self.w_hh = nn.ModuleList(hh)
 
-    def execute(self, input, hidden):
+    def forward(self, input, hidden):
         """"Defines the forward computation of the LSTMCell"""
         hy, cy = [], []
         for i in range(self.nlayers):
@@ -67,7 +67,7 @@ class Attention(nn.Module):
         self.GlobalAvg = nn.AdaptiveAvgPool2d((1, 1))
         self.relu = nn.ReLU()
 
-    def execute(self, x):
+    def forward(self, x):
         org = x
         seq = self.GlobalAvg(x)
         seq = seq.view(seq.size(0), seq.size(1))

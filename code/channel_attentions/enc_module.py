@@ -1,6 +1,7 @@
 # Context encoding for semantic segmentation (CVPR 2018)
 import jittor as jt
-from jittor import nn, init
+from torch import nn
+from jittor import init
 
 
 class Encoding(nn.Module):
