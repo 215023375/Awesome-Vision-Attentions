@@ -11,7 +11,7 @@ class small_cell(nn.Module):
                                  nn.ReLU(),
                                  nn.Linear(input_size // 4, 4 * hidden_size))
 
-    def execute(self, x):
+    def forward(self, x):
         return self.seq(x)
 
 

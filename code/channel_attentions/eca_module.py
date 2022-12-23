@@ -16,7 +16,7 @@ class ECALayer(nn.Module):
                               padding=(k_size - 1) // 2, bias=False)
         self.sigmoid = nn.Sigmoid()
 
-    def execute(self, x):
+    def forward(self, x):
         # feature descriptor on the global spatial information
         y = self.avg_pool(x)
 

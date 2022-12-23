@@ -15,7 +15,7 @@ class GCT(nn.Module):
         self.mode = mode
         self.after_relu = after_relu
 
-    def execute(self, x):
+    def forward(self, x):
 
         if self.mode == 'l2':
             embedding = (x.pow(2).sum(2, keepdims=True).sum(3, keepdims=True) +

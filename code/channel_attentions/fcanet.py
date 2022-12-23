@@ -59,7 +59,7 @@ class MultiSpectralAttentionLayer(nn.Module):
         )
         self.avgpool = nn.AdaptiveAvgPool2d((self.dct_h, self.dct_w))
 
-    def execute(self, x):
+    def forward(self, x):
         n, c, h, w = x.shape
         x_pooled = x
         if h != self.dct_h or w != self.dct_w:
@@ -90,7 +90,7 @@ class MultiSpectralDCTLayer(nn.Module):
         self.weight = self.get_dct_filter(
             height, width, mapper_x, mapper_y, channel)
 
-    def execute(self, x):
+    def forward(self, x):
         assert len(x.shape) == 4, 'x must been 4 dimensions, but got ' + \
             str(len(x.shape))
         # n, c, h, w = x.shape

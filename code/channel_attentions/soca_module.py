@@ -5,7 +5,7 @@ from jittor import Function
 
 
 class Covpool(Function):
-    def execute(self, input):
+    def forward(self, input):
         x = input
         batchSize = x.data.shape[0]
         dim = x.data.shape[1]
@@ -35,7 +35,7 @@ class Covpool(Function):
 
 
 class Sqrtm(Function):
-    def execute(self, input, iterN):
+    def forward(self, input, iterN):
         x = input
         batchSize = x.data.shape[0]
         dim = x.data.shape[1]
@@ -118,7 +118,7 @@ class SOCA(nn.Module):
         self.CovpoolLayer = Covpool()
         self.SqrtmLayer = Sqrtm()
 
-    def execute(self, x):
+    def forward(self, x):
         b, c, h, w = x.shape
 
         h1 = 1000

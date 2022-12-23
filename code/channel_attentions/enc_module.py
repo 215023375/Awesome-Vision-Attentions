@@ -41,7 +41,7 @@ class Encoding(nn.Module):
                         (expanded_x - reshaped_codewords)).sum(dim=1)
         return encoded_feat
 
-    def execute(self, x):
+    def forward(self, x):
         assert x.ndim == 4 and x.size(1) == self.channels
         # [batch_size, channels, height, width]
         batch_size = x.size(0)
@@ -66,7 +66,7 @@ class EncModule(nn.Module):
         self.fc = nn.Sequential(
             nn.Linear(in_channels, in_channels), nn.Sigmoid())
 
-    def execute(self, x):
+    def forward(self, x):
         encoding_projection = self.encoding_project(x)
         encoding_feat = self.encoding(encoding_projection).mean(dim=1)
         batch_size, channels, _, _ = x.size()
