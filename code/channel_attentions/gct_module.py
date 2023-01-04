@@ -1,5 +1,5 @@
 # Gated channel transformation for visual recognition (CVPR2020)
-import jittor as jt
+
 from torch import nn
 
 

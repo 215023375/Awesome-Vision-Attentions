@@ -1,6 +1,6 @@
 # Fcanet: Frequency channel attention networks (ICCV 2021)
 import math
-import jittor as jt
+
 from torch import nn
 
 

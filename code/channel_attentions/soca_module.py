@@ -1,5 +1,5 @@
 # Second-Order Attention Network for Single Image Super-Resolution (CVPR 2019)
-import jittor as jt
+
 from torch import nn
 from jittor import Function
 

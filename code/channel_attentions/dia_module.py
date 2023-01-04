@@ -1,5 +1,5 @@
 # DIANet: Dense-and-Implicit Attention Network (AAAI 2020)
-import jittor as jt
+
 from torch import nn
 
 

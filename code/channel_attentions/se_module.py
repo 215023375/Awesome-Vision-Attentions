@@ -1,6 +1,6 @@
 from typing import Optional, Callable
 
-import jittor as jt
+
 from torch import nn
 from torchvision.models.resnet import BasicBlock
 

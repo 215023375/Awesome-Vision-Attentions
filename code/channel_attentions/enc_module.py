@@ -1,5 +1,5 @@
 # Context encoding for semantic segmentation (CVPR 2018)
-import jittor as jt
+
 from torch import nn
 from jittor import init
 

@@ -1,5 +1,5 @@
 # Simam: A simple, parameter-free attention module for convolutional neural networks (ICML 2021)
-import jittor as jt
+
 from jittor import nn
 
 

@@ -1,4 +1,4 @@
-import jittor as jt
+
 from torch import nn
 
 

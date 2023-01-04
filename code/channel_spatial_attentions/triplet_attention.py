@@ -1,5 +1,5 @@
 # Rotate to attend: Convolutional triplet attention module (WACV 2021)
-import jittor as jt
+
 from jittor import nn
 
 

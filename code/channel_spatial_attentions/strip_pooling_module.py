@@ -1,5 +1,5 @@
 # Strip Pooling: Rethinking spatial pooling for scene parsing (CVPR 2020)
-import jittor as jt
+
 from jittor import nn
 
 
