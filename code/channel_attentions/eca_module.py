@@ -31,7 +31,7 @@ class ECALayer(nn.Module):
 
 def main():
     attention_block = ECALayer()
-    input = jt.rand([4, 64, 32, 32])
+    input = np.rand([4, 64, 32, 32])
     output = attention_block(input)
     print(input.size(), output.size())
 

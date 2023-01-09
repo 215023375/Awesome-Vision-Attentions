@@ -96,7 +96,7 @@ class MultiSpectralDCTLayer(nn.Module):
         # n, c, h, w = x.shape
 
         x = x * self.weight
-        result = jt.sum(jt.sum(x, dim=2), dim=2)
+        result = np.sum(np.sum(x, dim=2), dim=2)
         return result
 
     def build_filter(self, pos, freq, POS):
@@ -107,7 +107,7 @@ class MultiSpectralDCTLayer(nn.Module):
             return result * math.sqrt(2)
 
     def get_dct_filter(self, tile_size_x, tile_size_y, mapper_x, mapper_y, channel):
-        dct_filter = jt.zeros((channel, tile_size_x, tile_size_y))
+        dct_filter = np.zeros((channel, tile_size_x, tile_size_y))
 
         c_part = channel // len(mapper_x)
 
@@ -122,7 +122,7 @@ class MultiSpectralDCTLayer(nn.Module):
 
 def main():
     attention_block = MultiSpectralAttentionLayer(64, 16, 16)
-    input = jt.ones([4, 64, 32, 32])
+    input = np.ones([4, 64, 32, 32])
     output = attention_block(input)
     print(input.size(), output.size())
 

@@ -1,7 +1,7 @@
 # DIANet: Dense-and-Implicit Attention Network (AAAI 2020)
 
 from torch import nn
-
+import numpy as np
 
 class small_cell(nn.Module):
     def __init__(self, input_size, hidden_size):
@@ -45,7 +45,7 @@ class LSTMCell(nn.Module):
             i_gate, f_gate, c_gate, o_gate = gates.chunk(4, 1)
             i_gate = i_gate.sigmoid()
             f_gate = f_gate.sigmoid()
-            c_gate = jt.tanh(c_gate)
+            c_gate = np.tanh(c_gate)
             o_gate = o_gate.sigmoid()
             ncx = (f_gate * cx) + (i_gate * c_gate)
             # nhx = o_gate * torch.tanh(ncx)
@@ -54,7 +54,7 @@ class LSTMCell(nn.Module):
             hy.append(nhx)
             input = self.dropout(nhx)
 
-        hy, cy = jt.stack(hy, 0), jt.stack(
+        hy, cy = np.stack(hy, 0), np.stack(
             cy, 0)  # number of layer * batch * hidden
         return hy, cy
 
@@ -71,9 +71,9 @@ class Attention(nn.Module):
         org = x
         seq = self.GlobalAvg(x)
         seq = seq.view(seq.size(0), seq.size(1))
-        ht = jt.zeros((1, seq.size(0), seq.size(
+        ht = np.zeros((1, seq.size(0), seq.size(
             1)))  # 1 mean number of layers
-        ct = jt.zeros((1, seq.size(0), seq.size(1)))
+        ct = np.zeros((1, seq.size(0), seq.size(1)))
         ht, ct = self.lstm(seq, (ht, ct))  # 1 * batch size * length
         # ht = self.sigmoid(ht)
         x = x * (ht[-1].view(ht.size(1), ht.size(2), 1, 1))
@@ -85,7 +85,7 @@ class Attention(nn.Module):
 
 def main():
     attention_block = Attention(64)
-    input = jt.rand([4, 64, 32, 32])
+    input = np.rand([4, 64, 32, 32])
     output = attention_block(input)
     print(input.size(), output.size())
 
