@@ -60,7 +60,8 @@ class LSTMCell(nn.Module):
 
 
 class Attention(nn.Module):
-    def __init__(self, channel):
+    def __init__(self, channel=None):
+        assert channel is not None, "'channel' in kwargs should not be None"
         super(Attention, self).__init__()
         self.lstm = LSTMCell(channel, channel, 1)
 

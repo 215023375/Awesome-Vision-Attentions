@@ -4,13 +4,14 @@ import numpy as np
 from torch import nn
 
 class SELayer(nn.Module):
-    def __init__(self, c, r=16):
+    def __init__(self, channel=None, reduction=16):
+        assert channel is not None, "'channel' in kwargs should not be None"
         super().__init__()
         self.squeeze = nn.AdaptiveAvgPool2d(1)
         self.excitation = nn.Sequential(
-            nn.Linear(c, c // r, bias=False),
+            nn.Linear(channel, channel // reduction, bias=False),
             nn.ReLU(inplace=True),
-            nn.Linear(c // r, c, bias=False),
+            nn.Linear(channel // reduction, channel, bias=False),
             nn.Sigmoid()
         )
 

@@ -1,4 +1,4 @@
-
+import numpy as np
 from torch import nn
 
 
@@ -9,7 +9,7 @@ class ECALayer(nn.Module):
         k_size: Adaptive selection of kernel size
     """
 
-    def __init__(self, k_size=3):
+    def __init__(self, k_size=3, **kwargs):
         super(ECALayer, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.conv = nn.Conv1d(1, 1, kernel_size=k_size,

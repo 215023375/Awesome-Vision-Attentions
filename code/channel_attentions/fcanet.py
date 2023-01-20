@@ -1,6 +1,6 @@
 # Fcanet: Frequency channel attention networks (ICCV 2021)
 import math
-
+import numpy as np
 from torch import nn
 
 
@@ -36,7 +36,11 @@ def get_freq_indices(method):
 
 
 class MultiSpectralAttentionLayer(nn.Module):
-    def __init__(self, channel, dct_h, dct_w, reduction=16, freq_sel_method='top16'):
+    def __init__(self, channel=None, dct_h=None, dct_w=None, reduction=16, freq_sel_method='top16'):
+        assert channel is not None, "'channel' in kwargs should not be None"
+        assert dct_h is not None, "'dct_h' in kwargs should not be None"
+        assert dct_w is not None, "'dct_w' in kwargs should not be None"
+
         super(MultiSpectralAttentionLayer, self).__init__()
         self.reduction = reduction
         self.dct_h = dct_h

@@ -6,12 +6,13 @@ import numpy as np
 
 class GCT(nn.Module):
 
-    def __init__(self, num_channels, epsilon=1e-5, mode='l2', after_relu=False):
+    def __init__(self, channel=None, epsilon=1e-5, mode='l2', after_relu=False):
+        assert channel is not None, "'channel' in kwargs should not be None"
         super(GCT, self).__init__()
 
-        self.alpha = np.ones((1, num_channels, 1, 1))
-        self.gamma = np.zeros((1, num_channels, 1, 1))
-        self.beta = np.zeros((1, num_channels, 1, 1))
+        self.alpha = np.ones((1, channel, 1, 1))
+        self.gamma = np.zeros((1, channel, 1, 1))
+        self.beta = np.zeros((1, channel, 1, 1))
         self.epsilon = epsilon
         self.mode = mode
         self.after_relu = after_relu

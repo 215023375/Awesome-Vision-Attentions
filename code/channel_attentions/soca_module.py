@@ -106,7 +106,8 @@ class Sqrtm(nn.Module):
 
 
 class SOCA(nn.Module):
-    def __init__(self, channel, reduction=8):
+    def __init__(self, channel=None, reduction=8):
+        assert channel is not None, "'channel' in kwargs should not be None"
         super().__init__()
 
         self.conv_du = nn.Sequential(
