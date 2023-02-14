@@ -1,5 +1,6 @@
 # Fcanet: Frequency channel attention networks (ICCV 2021)
 import math
+import torch
 import numpy as np
 from torch import nn
 
@@ -57,7 +58,7 @@ class MultiSpectralAttentionLayer(nn.Module):
             dct_h, dct_w, mapper_x, mapper_y, channel)
         self.fc = nn.Sequential(
             nn.Linear(channel, channel // reduction, bias=False),
-            nn.ReLU(),
+            nn.ReLU(inplace=False),
             nn.Linear(channel // reduction, channel, bias=False),
             nn.Sigmoid()
         )
@@ -100,7 +101,7 @@ class MultiSpectralDCTLayer(nn.Module):
         # n, c, h, w = x.shape
 
         x = x * self.weight
-        result = np.sum(np.sum(x, dim=2), dim=2)
+        result = torch.sum(np.sum(x, dim=2), dim=2)
         return result
 
     def build_filter(self, pos, freq, POS):
@@ -111,7 +112,7 @@ class MultiSpectralDCTLayer(nn.Module):
             return result * math.sqrt(2)
 
     def get_dct_filter(self, tile_size_x, tile_size_y, mapper_x, mapper_y, channel):
-        dct_filter = np.zeros((channel, tile_size_x, tile_size_y))
+        dct_filter = torch.zeros((channel, tile_size_x, tile_size_y))
 
         c_part = channel // len(mapper_x)
 

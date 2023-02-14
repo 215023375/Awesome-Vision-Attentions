@@ -1,6 +1,7 @@
 # Gated channel transformation for visual recognition (CVPR2020)
 
 from torch import nn
+import torch
 import numpy as np
 
 
@@ -10,9 +11,9 @@ class GCT(nn.Module):
         assert channel is not None, "'channel' in kwargs should not be None"
         super(GCT, self).__init__()
 
-        self.alpha = np.ones((1, channel, 1, 1))
-        self.gamma = np.zeros((1, channel, 1, 1))
-        self.beta = np.zeros((1, channel, 1, 1))
+        self.alpha = torch.ones((1, channel, 1, 1))
+        self.gamma = torch.zeros((1, channel, 1, 1))
+        self.beta = torch.zeros((1, channel, 1, 1))
         self.epsilon = epsilon
         self.mode = mode
         self.after_relu = after_relu
@@ -36,8 +37,9 @@ class GCT(nn.Module):
                 (np.abs(embedding).mean(dim=1, keepdims=True) + self.epsilon)
         else:
             print('Unknown mode!')
+            raise RuntimeError("Unknown mode!")
 
-        gate = 1. + np.tanh(embedding * norm + self.beta)
+        gate = 1. + torch.tanh(embedding * norm + self.beta)
 
         return x * gate
 

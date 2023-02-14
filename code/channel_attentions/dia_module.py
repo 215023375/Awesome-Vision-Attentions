@@ -1,14 +1,16 @@
 # DIANet: Dense-and-Implicit Attention Network (AAAI 2020)
+from ..utils import use_same_device_as_input_tensor as use_input_device
 
 from torch import nn
 import numpy as np
+import torch
 
 class small_cell(nn.Module):
     def __init__(self, input_size, hidden_size):
         """"Constructor of the class"""
         super(small_cell, self).__init__()
         self.seq = nn.Sequential(nn.Linear(input_size, input_size // 4),
-                                 nn.ReLU(),
+                                 nn.ReLU(inplace=False),
                                  nn.Linear(input_size // 4, 4 * hidden_size))
 
     def forward(self, x):
@@ -45,7 +47,7 @@ class LSTMCell(nn.Module):
             i_gate, f_gate, c_gate, o_gate = gates.chunk(4, 1)
             i_gate = i_gate.sigmoid()
             f_gate = f_gate.sigmoid()
-            c_gate = np.tanh(c_gate)
+            c_gate = torch.tanh(c_gate)
             o_gate = o_gate.sigmoid()
             ncx = (f_gate * cx) + (i_gate * c_gate)
             # nhx = o_gate * torch.tanh(ncx)
@@ -54,7 +56,7 @@ class LSTMCell(nn.Module):
             hy.append(nhx)
             input = self.dropout(nhx)
 
-        hy, cy = np.stack(hy, 0), np.stack(
+        hy, cy = torch.stack(hy, 0), torch.stack(
             cy, 0)  # number of layer * batch * hidden
         return hy, cy
 
@@ -66,15 +68,15 @@ class Attention(nn.Module):
         self.lstm = LSTMCell(channel, channel, 1)
 
         self.GlobalAvg = nn.AdaptiveAvgPool2d((1, 1))
-        self.relu = nn.ReLU()
+        self.relu = nn.ReLU(inplace=False)
 
     def forward(self, x):
         org = x
         seq = self.GlobalAvg(x)
         seq = seq.view(seq.size(0), seq.size(1))
-        ht = np.zeros((1, seq.size(0), seq.size(
-            1)))  # 1 mean number of layers
-        ct = np.zeros((1, seq.size(0), seq.size(1)))
+        ht = torch.zeros((1, seq.size(0), seq.size(
+            1))).to(use_input_device(x))  # 1 mean number of layers
+        ct = torch.zeros((1, seq.size(0), seq.size(1))).to(use_input_device(x))
         ht, ct = self.lstm(seq, (ht, ct))  # 1 * batch size * length
         # ht = self.sigmoid(ht)
         x = x * (ht[-1].view(ht.size(1), ht.size(2), 1, 1))
@@ -86,7 +88,7 @@ class Attention(nn.Module):
 
 def main():
     attention_block = Attention(64)
-    input = np.rand([4, 64, 32, 32])
+    input = torch.rand([4, 64, 32, 32])
     output = attention_block(input)
     print(input.size(), output.size())
 
