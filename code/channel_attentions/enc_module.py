@@ -67,7 +67,7 @@ class EncModule(nn.Module):
         self.encoding_project = nn.Conv2d(channel, channel, 1)
         self.encoding = nn.Sequential(
             Encoding(channels=channel, num_codes=num_codes),
-            nn.BatchNorm2d(num_codes),
+            nn.BatchNorm1d(num_codes),
             nn.ReLU(inplace=True))
         self.fc = nn.Sequential(
             nn.Linear(channel, channel), nn.Sigmoid())

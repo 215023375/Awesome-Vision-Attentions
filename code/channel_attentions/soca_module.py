@@ -17,7 +17,7 @@ class Covpool(nn.Module):
         x = x.reshape(batchSize, dim, M)
         I_hat = torch.Tensor((-1./M/M)*torch.ones((M, M)) + (1./M)*torch.eye(M, M)).to(use_input_device(input))
         I_hat = I_hat.view(1, M, M).repeat(batchSize, 1, 1)
-        y = torch.bmm(torch.bmm(x, I_hat), x.transpose(0, 2, 1))
+        y = torch.bmm(torch.bmm(x, I_hat), x.permute(0, 2, 1))
         self.save_vars = (input, I_hat)
         return y
 
@@ -30,7 +30,7 @@ class Covpool(nn.Module):
         w = x.data.shape[3]
         M = h*w
         x = x.reshape(batchSize, dim, M)
-        grad_input = grad_output + grad_output.transpose(0, 2, 1)
+        grad_input = grad_output + grad_output.permute(0, 2, 1)
         grad_input = torch.bmm(torch.bmm(grad_input, x), I_hat)
         grad_input = grad_input.reshape(batchSize, dim, h, w)
         return grad_input
@@ -41,13 +41,13 @@ class Sqrtm(nn.Module):
         x = input
         batchSize = x.data.shape[0]
         dim = x.data.shape[1]
-        I3 = 3.0*torch.eye(dim, dim).view(1, dim, dim).repeat(batchSize, 1, 1)
+        I3 = 3.0*torch.eye(dim, dim).view(1, dim, dim).repeat(batchSize, 1, 1).to(use_input_device(input))
         normA = (1.0/3.0)*x.matmul(I3).sum(dim=1).sum(dim=1)
         A = x.divide(normA.view(batchSize, 1, 1).expand_as(x))
-        Y = torch.zeros((batchSize, iterN, dim, dim))
+        Y = torch.zeros((batchSize, iterN, dim, dim)).to(use_input_device(input))
         Y.requires_grad = False
         Z = torch.eye(dim, dim).view(
-            1, dim, dim).repeat(batchSize, iterN, 1, 1)
+            1, dim, dim).repeat(batchSize, iterN, 1, 1).to(use_input_device(input))
         if iterN < 2:
             ZY = 0.5*(I3 - A)
             Y[:, 0, :, :] = torch.bmm(A, ZY)
@@ -103,7 +103,7 @@ class Sqrtm(nn.Module):
             normA.view(batchSize, 1, 1).expand_as(x))
         grad_aux = der_NSiter.matmul(x).sum(dim=1).sum(dim=1)
         for i in range(batchSize):
-            grad_input[i, :, :] += (der_postComAux[i]
+            grad_input[i, :, :] = grad_input[i, :, :] + (der_postComAux[i]
                                     - grad_aux[i] / (normA[i] * normA[i])) * torch.ones((dim,)).diag()
         return grad_input, None
 

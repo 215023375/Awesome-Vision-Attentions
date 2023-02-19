@@ -4,6 +4,7 @@ import torch
 import numpy as np
 from torch import nn
 
+from ..utils import use_same_device_as_input_tensor as use_input_device
 
 def get_freq_indices(method):
     assert method in ['top1', 'top2', 'top4', 'top8', 'top16', 'top32',
@@ -100,8 +101,8 @@ class MultiSpectralDCTLayer(nn.Module):
             str(len(x.shape))
         # n, c, h, w = x.shape
 
-        x = x * self.weight
-        result = torch.sum(np.sum(x, dim=2), dim=2)
+        x = x * self.weight.clone().to(use_input_device(x))
+        result = torch.sum(torch.sum(x, dim=2), dim=2)
         return result
 
     def build_filter(self, pos, freq, POS):
