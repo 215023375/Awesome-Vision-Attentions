@@ -45,8 +45,8 @@ class Encoding(nn.Module):
     def forward(self, x):
         assert x.ndim == 4 and x.size(1) == self.channels
 
-        self_codewords = self.codewords.clone().to(use_input_device(x))
-        self_scale = self.scale.clone().to(use_input_device(x))
+        self.codewords = self.codewords.to(use_input_device(x))
+        self.scale = self.scale.to(use_input_device(x))
 
         # [batch_size, channels, height, width]
         batch_size = x.size(0)
@@ -54,9 +54,9 @@ class Encoding(nn.Module):
         x = x.view(batch_size, self.channels, -1).permute(0, 2, 1)
         # assignment_weights: [batch_size, channels, num_codes]
         assignment_weights = torch.softmax(
-            self.scaled_l2(x, self_codewords, self_scale), dim=2)
+            self.scaled_l2(x, self.codewords, self.scale), dim=2)
         # aggregate
-        encoded_feat = self.aggregate(assignment_weights, x, self_codewords)
+        encoded_feat = self.aggregate(assignment_weights, x, self.codewords)
         return encoded_feat
 
 

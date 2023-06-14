@@ -101,7 +101,7 @@ class MultiSpectralDCTLayer(nn.Module):
             str(len(x.shape))
         # n, c, h, w = x.shape
 
-        x = x * self.weight.clone().to(use_input_device(x))
+        x = x * self.weight.to(use_input_device(x))
         result = torch.sum(torch.sum(x, dim=2), dim=2)
         return result
 
