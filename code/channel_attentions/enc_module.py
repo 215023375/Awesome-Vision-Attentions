@@ -13,9 +13,9 @@ class Encoding(nn.Module):
         self.channels, self.num_codes = channels, num_codes
         std = 1. / ((num_codes * channels)**0.5)
         # [num_codes, channels]
-        self.codewords = torch.Tensor.uniform_(torch.rand((num_codes, channels)), -std, std)
+        self.codewords = nn.Parameter(torch.Tensor.uniform_(torch.rand((num_codes, channels)), -std, std))
         # [num_codes]
-        self.scale = torch.Tensor.uniform_(torch.rand((num_codes,)), -1, 0)
+        self.scale = nn.Parameter(torch.Tensor.uniform_(torch.rand((num_codes,)), -1, 0))
 
     @staticmethod
     def scaled_l2(x, codewords, scale):
